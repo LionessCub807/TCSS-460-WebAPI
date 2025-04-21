@@ -55,6 +55,30 @@ function mwValidNameMessageBody(
     }
 }
 
+/** ----------------------------------------------------------------- */
+/** ----------------------------------- TESTER ---------------------- */
+/** ----------------------------------------------------------------- */
+
+/**
+ * @api {get} /message/hello Simple Hello World endpoint
+ *
+ * @apiDescription Returns a simple Hello World message
+ *
+ * @apiName GetHelloWorld
+ * @apiGroup Message
+ *
+ * @apiSuccess {String} message "Hello World!"
+ */
+messageRouter.get('/hello', (request: Request, response: Response) => {
+    response.status(200).send({
+        message: 'Hello World!',
+    });
+});
+
+/** ----------------------------------------------------------------- */
+/** ------------------------------- END TESTER ---------------------- */
+/** ----------------------------------------------------------------- */
+
 /**
  * @apiDefine JSONError
  * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
@@ -244,7 +268,7 @@ messageRouter.get(
  */
 messageRouter.get('/:name', (request: Request, response: Response) => {
     const theQuery = 'SELECT name, message, priority FROM Demo WHERE name = $1';
-    let values = [request.params.name];
+    const values = [request.params.name];
 
     pool.query(theQuery, values)
         .then((result) => {
