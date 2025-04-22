@@ -1,4 +1,4 @@
-# TCSS460-
+# TCSS460 - Alpha
 
 # Group 4 Alpha Sprint Documentation
 
@@ -8,8 +8,8 @@
 ## Alpha Sprint Contribution
 
 - **Selly** - Set up and deployed Heroku
-- **Bindi** -
-- **Jacob** -
+- **Bindi** - Sick
+- **Jacob** - Sick
 - **Bill** - Setup api documentation
 
 ## Alpha Sprint Meetings
