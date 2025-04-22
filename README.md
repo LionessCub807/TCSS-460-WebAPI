@@ -18,3 +18,4 @@
 - Thursday (04/17) - Initial Alpha meeting
 
 ## Alpha Sprint Comments
+- Question: In the csv file, does the average ratings and total ratings columns need to be there since it can be calculated?
