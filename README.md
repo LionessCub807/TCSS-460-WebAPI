@@ -2,8 +2,8 @@
  
 # Group 4 Alpha Sprint Documentation
 
-Heroku - (https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/)
-API documnetation (Change) <!-- This link needs to be updated -->
+*Heroku - https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/
+*API documnetation  - https://billjamesm.github.io/tcss-460-group4-APIdoc-alpha/ 
 
 ## Alpha Sprint Contribution
 
