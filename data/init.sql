@@ -23,24 +23,97 @@ CREATE TABLE Account_Credential (Credential_ID SERIAL PRIMARY KEY,
                       FOREIGN KEY(Account_ID) REFERENCES Account(Account_ID)
 );
 
-CREATE TABLE BOOKS (id INT PRIMARY KEY,
+-- Temporary table
+-- Only used to move data from CSV file to SQL tables
+CREATE TEMP TABLE tempbook (book_id INT,
+    isbn13 BIGINT,
+    authors TEXT,
+    original_publication_year INT,
+    original_title TEXT,
+    title TEXT,
+    average_rating FLOAT,
+    ratings_count INT,
+    ratings_1 INT,
+    ratings_2 INT,
+    ratings_3 INT,
+    ratings_4 INT,
+    ratings_5 INT,
+    image_url TEXT,
+    small_image_url TEXT
+);
+
+-- Populating temporary table
+COPY tempbook
+FROM '/docker-entrypoint-initdb.d/books.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- Book table
+CREATE TABLE Book (bookid INT PRIMARY KEY,
         isbn13 BIGINT,
-        authors TEXT,
         publication_year INT,
         original_title TEXT,
         title TEXT,
-        rating_avg FLOAT,
-        rating_count INT,
+        image_url TEXT,
+        image_small_url TEXT
+    );
+
+-- Inserts all information about books
+INSERT INTO Book (bookid, isbn13, publication_year, original_title, title, image_url, image_small_url) 
+SELECT book_id, isbn13, original_publication_year, original_title, title, image_url, small_image_url
+FROM tempbook;
+
+-- Author table
+CREATE TABLE Author(authorid SERIAL PRIMARY KEY,
+        authorname TEXT
+);
+
+-- Inserts all authors names
+INSERT INTO Author (authorname) 
+
+-- Selecting all authors that are comma sepreated
+-- Turns to array => turns each index of array into a value
+SELECT DISTINCT TRIM(unnest(string_to_array(authors, ','))) 
+AS authors 
+FROM tempbook 
+
+UNION 
+
+-- Selecting all authors that are not comma sepreated
+SELECT DISTINCT authors 
+AS author 
+FROM tempbook 
+WHERE authors 
+NOT LIKE '%,%';
+
+-- Book and author transaction table
+CREATE TABLE BookAuthor (authorid INT,
+        bookid INT,
+        FOREIGN KEY (authorid) REFERENCES Author(authorid),
+        FOREIGN KEY (bookid) REFERENCES BOOK(bookid)
+);
+
+-- Populating transaction table
+-- Joining author on temp based on author name
+INSERT INTO BookAuthor (authorid, bookid) 
+SELECT a.authorid, t.book_id 
+FROM author a 
+JOIN tempbook t 
+ON t.authors 
+LIKE '%' || a.authorname || '%';
+
+-- Ratings Table
+CREATE TABLE Ratings(ratingid SERIAL PRIMARY KEY,
+        bookid INT,
         rating_1_star INT,
         rating_2_star INT,
         rating_3_star INT,
         rating_4_star INT,
         rating_5_star INT,
-        image_url TEXT,
-        image_small_url TEXT
-    );
+        FOREIGN KEY (bookid) REFERENCES Book(bookid)
+);
 
-COPY books
-FROM '/docker-entrypoint-initdb.d/books.csv'
-DELIMITER ','
-CSV HEADER;
+-- Populating ratings table
+INSERT INTO Ratings (bookid, rating_1_star, rating_2_star, rating_3_star, rating_4_star, rating_5_star) 
+SELECT book_id, ratings_1, ratings_2, ratings_3, ratings_4, ratings_5
+FROM tempbook;
