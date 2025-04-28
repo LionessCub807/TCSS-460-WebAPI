@@ -50,7 +50,7 @@ CSV HEADER;
 
 -- Book table
 CREATE TABLE Books (bookid SERIAL PRIMARY KEY,
-        isbn13 BIGINT,
+        isbn13 BIGINT UNIQUE,
         publication_year INT,
         original_title TEXT,
         title TEXT,
