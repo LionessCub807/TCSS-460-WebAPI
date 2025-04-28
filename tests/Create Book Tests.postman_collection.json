@@ -1,0 +1,650 @@
+{
+	"info": {
+		"_postman_id": "b57f3ffb-7350-4f83-a2de-a93dafb27226",
+		"name": "Create Book Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44260564",
+		"_collection_link": "https://billmarban.postman.co/workspace/bill-marban's-Workspace~57f780dd-f71a-4130-886b-acacda14dc2d/collection/44260564-b57f3ffb-7350-4f83-a2de-a93dafb27226?action=share&source=collection_link&creator=44260564"
+	},
+	"item": [
+		{
+			"name": "Normal Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response contains 'table created'\", function () {",
+							"    pm.response.to.have.body(\"table created\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Group 4 Test\",\n  \"originalTitle\": \"Group 4 Test\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"// we do get back a 400 but this doesn't tell us that it was because of the url",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"a rating input is either not provided or not a number - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Missing Image Test\",\n  \"originalTitle\": \"Missing Image\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890131,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing image icon",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"// we do get back a 400 but this doesn't tell us that it was because of the url",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"a rating input is either not provided or not a number - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Missing Image Test\",\n  \"originalTitle\": \"Missing Image\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890132,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing Rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"a rating input is either not provided or not a number - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Rating Test\",\n  \"originalTitle\": \"Rating\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Negative Value Rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// negative values are accepted",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"a rating input is either not provided or not a number - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \" Negative Rating Test\",\n  \"originalTitle\": \"Negative Rating\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890129,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": -1,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Invalid Value Rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"a rating input is either not provided or not a number - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \" Invalid Rating Test\",\n  \"originalTitle\": \"Invalid Rating\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890130,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": \"Invalid\",\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing Year",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// We get a 500 error",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"the published year or ISBN value provided is either missing, not a number, or not of the required length - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Group 4 Test\",\n  \"originalTitle\": \"Group 4 Test\",\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Invalid Year",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"the published year or ISBN value provided is either missing, not a number, or not of the required length - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Group 4 Test\",\n  \"originalTitle\": \"Group 4 Test\",\n  \"yearPublished\": -1,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing Original Title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing required information relating to the author, title, or originalTitle field\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Missing Original Title\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing Title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing required information relating to the author, title, or originalTitle field\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"originalTitle\": \"Missing Title\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Duplicate Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains error message\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"message\", \"Book already exists\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Group 4 Test\",\n  \"originalTitle\": \"Group 4 Test\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234567890123,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing Author",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing required information relating to the author, title, or originalTitle field\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Missing Author Test\",\n    \"originalTitle\": \"Missing Author\",\n    \"yearPublished\": 2025,\n    \"ISBN\": 1234567890124,\n    \"oneStarRatings\": 1,\n    \"twoStarRatings\": 2,\n    \"threeStarRatings\": 3,\n    \"fourStarRatings\": 4,\n    \"fiveStarRatings\": 5,\n    \"imageurl\": \"missing author\",\n    \"iconurl\": \"missing author icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Invalid ISBN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"the published year or ISBN value provided is either missing, not a number, or not of the required length - check documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Invalid ISBN Test\",\n  \"originalTitle\": \"Invalid ISBN\",\n  \"yearPublished\": 2025,\n  \"ISBN\": 1234,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Missing ISBN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// we get an undefined error",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body has missing author error\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing required information relating to the author, title, or originalTitle field\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"author\": \"Group 4\",\n  \"title\": \"Missing ISBN Test\",\n  \"originalTitle\": \"Missing ISBN\",\n  \"yearPublished\": 2025,\n  \"oneStarRatings\": 100,\n  \"twoStarRatings\": 200,\n  \"threeStarRatings\": 300,\n  \"fourStarRatings\": 400,\n  \"fiveStarRatings\": 500,\n  \"imageurl\": \"place hold\",\n  \"iconurl\": \"place hold icon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/new",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"new"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
