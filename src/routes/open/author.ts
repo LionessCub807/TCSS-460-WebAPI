@@ -14,15 +14,21 @@ function mwValidAuthorName(
     next: NextFunction
 ) {
     console.log('mw');
-    const authorName = request.params.authorname as string;
+    console.log('Request here = ' + request);
+    console.log('Response = ' + response);
+    const authorName = request.params.authorname;
+    console.log('Author = ' + authorName);
 
-    if (validationFunctions.isStringProvided(authorName)) {
+    if (
+        validationFunctions.isStringProvided(authorName) &&
+        isNaN(Number(authorName)) &&
+        authorName.trim().length > 0
+    ) {
         next();
     } else {
-        console.error('Missing or invalid author name parameter');
+        console.error('Invalid author name parameter');
         response.status(400).send({
-            message:
-                'Missing valid author name - please refer to documentation',
+            message: 'Invalid author name - please refer to documentation',
         });
     }
 }
@@ -60,6 +66,23 @@ authorRoutes.get('/all', (request: Request, response: Response) => {
 });
 
 /**
+ * @api {get} /author/ Request to catch missing author name
+ *
+ * @apiDescription Catches requests where author name is missing and returns a 400 error
+ *
+ * @apiName MissingAuthorName
+ * @apiGroup Author
+ *
+ * @apiError (400: Missing Author Name) {String} message "Missing author name - please provide a valid author name"
+ */
+authorRoutes.get('/', (request: Request, response: Response) => {
+    console.error('Missing author name');
+    response.status(400).send({
+        message: 'Missing valid author name - please refer to documentation',
+    });
+});
+
+/**
  * @api {get} /author/:name Request to retrieve books by the author's full name
  *
  * @apiDescription Request to retrieve all books for a given author's full name. MUST BE AUTHOR'S FULL NAME
@@ -76,7 +99,7 @@ authorRoutes.get('/all', (request: Request, response: Response) => {
  * @apiSuccess {string} books.original_title The original title (if different).
  * @apiSuccess {number} books.publication_year The year the book was published.
  *
- * @apiError (400: Missing Parameter) {String} message "Missing valid author name - please refer to documentation"
+ * @apiError (400: Invalid or Missing Author Name) {String} message "Missing or invalid author name - please refer to documentation"
  * @apiError (404: Not Found) {String} message "No books found for given author"
  * @apiError (500: Server Error) {String} message "server error - contact support"
  */
@@ -86,6 +109,7 @@ authorRoutes.get(
     (request: Request, response: Response) => {
         const authorName = request.params.authorname as string;
         console.log('function');
+        console.log(authorName);
         const theQuery = `
             SELECT b.bookid, b.title, b.original_title, b.publication_year, a.authorname
             FROM Books b
