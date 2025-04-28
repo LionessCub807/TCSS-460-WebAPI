@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "78b0c7e5-f7e3-41e3-97ca-8d8fc50e5f88",
+		"name": "Retrieve Book By Author",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43663289",
+		"_collection_link": "https://team11-9261.postman.co/workspace/Messages~a9b27417-1fcc-424c-a0f3-4860e822c7b4/collection/43663289-78b0c7e5-f7e3-41e3-97ca-8d8fc50e5f88?action=share&source=collection_link&creator=43663289"
+	},
+	"item": [
+		{
+			"name": "GET All Authors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains authors array\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"authors\");\r",
+							"    pm.expect(jsonData.authors).to.be.an(\"array\");\r",
+							"    if (jsonData.authors.length > 0) {\r",
+							"        pm.expect(jsonData.authors[0]).to.have.property(\"authorid\");\r",
+							"        pm.expect(jsonData.authors[0]).to.have.property(\"authorname\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/author/all",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"author",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Book By Author",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains author and books array\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"authors\");\r",
+							"    pm.expect(jsonData).to.have.property(\"books\");\r",
+							"    pm.expect(jsonData.books).to.be.an(\"array\");\r",
+							"    if (jsonData.books.length > 0) {\r",
+							"        pm.expect(jsonData.books[0]).to.have.property(\"bookid\");\r",
+							"        pm.expect(jsonData.books[0]).to.have.property(\"title\");\r",
+							"        pm.expect(jsonData.books[0]).to.have.property(\"original_title\");\r",
+							"        pm.expect(jsonData.books[0]).to.have.property(\"publication_year\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/author/:authorname",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"author",
+						":authorname"
+					],
+					"variable": [
+						{
+							"key": "authorname",
+							"value": "Marvin Israel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Missing Author Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains error message\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"message\", \"Missing valid author name - please refer to documentation\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/author/:authorname",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"author",
+						":authorname"
+					],
+					"variable": [
+						{
+							"key": "authorname",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Author Not Found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains error message\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"message\", \"No books found for given author\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/author/:authorname",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"author",
+						":authorname"
+					],
+					"variable": [
+						{
+							"key": "authorname",
+							"value": "Bob"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Server Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains server error message\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"message\", \"server error - contact support\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/author/123",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"author",
+						"123"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{{isbn}}",
+			"value": "9780439023480",
+			"type": "string"
+		}
+	]
+}
