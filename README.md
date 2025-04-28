@@ -12,7 +12,7 @@
 - **Jacob** - Implemented create book route, cleaned csv file, wrote isbn route tests
 - **Bill** - Refreshed api documentation, wrote books by author route, wrote tests for create book route.
 
-## Alpha Sprint Meetings
+## Beta Sprint Meetings
 
 - 4/22 3:30PM - 5:00PM
 
@@ -29,5 +29,5 @@ What was discussed
 	Creating database for Docker/Heroku
 	Tasks for the rest of the week
 
-## Alpha Sprint Comments
+## Beta Sprint Comments
 - wab api
