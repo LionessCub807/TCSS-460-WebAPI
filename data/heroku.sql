@@ -25,25 +25,6 @@ CREATE TABLE Account_Credential (Credential_ID SERIAL PRIMARY KEY,
                       FOREIGN KEY(Account_ID) REFERENCES Account(Account_ID)
 );
 
-
-DROP TABLE IF EXISTS BOOKS;
---CREATE TABLE BOOKS (id INT PRIMARY KEY,
-        --isbn13 BIGINT,
-        --authors TEXT,
-        --publication_year INT,
-        --original_title TEXT,
-        --title TEXT,
-        --rating_avg FLOAT,
-        --rating_count INT,
-        --rating_1_star INT,
-        --rating_2_star INT,
-        --rating_3_star INT,
-        --rating_4_star INT,
-        --rating_5_star INT,
-        --image_url TEXT,
-        --image_small_url TEXT
-    --);
-
     -- Temporary table
 -- Only used to move data from CSV file to SQL tables
 DROP TABLE IF EXISTS tempbook CASCADE;
