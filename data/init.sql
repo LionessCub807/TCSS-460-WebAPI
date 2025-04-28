@@ -49,7 +49,7 @@ DELIMITER ','
 CSV HEADER;
 
 -- Book table
-CREATE TABLE Books (bookid INT PRIMARY KEY,
+CREATE TABLE Books (bookid SERIAL PRIMARY KEY,
         isbn13 BIGINT,
         publication_year INT,
         original_title TEXT,
@@ -59,8 +59,8 @@ CREATE TABLE Books (bookid INT PRIMARY KEY,
     );
 
 -- Inserts all information about books
-INSERT INTO Books (bookid, isbn13, publication_year, original_title, title, image_url, image_small_url) 
-SELECT book_id, isbn13, original_publication_year, original_title, title, image_url, small_image_url
+INSERT INTO Books (isbn13, publication_year, original_title, title, image_url, image_small_url) 
+SELECT isbn13, original_publication_year, original_title, title, image_url, small_image_url
 FROM tempbook;
 
 -- Author table
