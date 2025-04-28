@@ -39,7 +39,7 @@ function mwValidBookBody(
  *
  * @apiDescription Request to add a new book to the database with accompanying information
  *
- * @apiName PostMessage
+ * @apiName Create Book
  * @apiGroup Books
  *
  * @apiBody {string} author, the writer of the book
