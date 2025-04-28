@@ -6,14 +6,6 @@ const createRouter: Router = express.Router();
 
 const isStringProvided = validationFunctions.isStringProvided;
 
-const format = (resultRow) =>
-    `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`;
-
-const formatKeep = (resultRow) => ({
-    ...resultRow,
-    formatted: `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`,
-});
-
 function mwValidBookBody(
     request: Request,
     response: Response,
@@ -32,7 +24,7 @@ function mwValidBookBody(
         console.error('Missing required information relating to the author, title, or originalTitle field');
         response.status(400).send({
             message:
-                'Missing required information relating to the author, title, or originalTitle field',
+                'Missing required information: information relating to the author, title, or originalTitle field is missing',
         });
     }
 }
@@ -51,23 +43,25 @@ function mwValidBookBody(
  * @apiGroup Books
  *
  * @apiBody {string} author, the writer of the book
- * @apiBody {string} the title of the book
- * @apiBody {string} the original book title
- * @apiBody {number} the year the book was first published, must be positive and no more than 4 digits
- * @apiBody {number} the ISBN belonging to the book, must be 13 digits
- * @apiBody {number} the amount of 1 star ratings the book has
- * @apiBody {number} the amount of 2 star ratings the book has
- * @apiBody {number} the amount of 3 star ratings the book has
- * @apiBody {number} the amount of 4 star ratings the book has
- * @apiBody {number} the amount of 5 star ratings the book has
- * @apiBody {string} url for image of book
- * @apiBody {string} url for icon of book
- * @apiSuccess (Success 201) {String} entry the string:
- *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
+ * @apiBody {string} title, the title of the book
+ * @apiBody {string} originalTitle, the original book title
+ * @apiBody {number} yearPublished, the year the book was first published, must be positive and no more than 4 digits
+ * @apiBody {number} ISBN, the ISBN belonging to the book, must be 13 digits
+ * @apiBody {number} oneStarRatings, the amount of 1 star ratings the book has
+ * @apiBody {number} twoStarRatings, the amount of 2 star ratings the book has
+ * @apiBody {number} threeStarRatings, the amount of 3 star ratings the book has
+ * @apiBody {number} fourStarRatings, the amount of 4 star ratings the book has
+ * @apiBody {number} fiveStarRatings, the amount of 5 star ratings the book has
+ * @apiBody {string} imageurl, url for image of book
+ * @apiBody {string} iconurl, url for icon of book
+ * 
+ * @apiSuccess (Success 201) {String} message: book created
  *
- * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - please refer to documentation"
- * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
+ * @apiError (400: Missing required information) {String} message "Missing required information: information relating to the author, title, or originalTitle field is missing - please refer to documentation"
+ * @apiError (400: Invalid or missing information) {String} message "Invalid or missing information: rating input is either not provided or not a number - please refer to documentation"
+ * @apiError (400: Invalid or missing information) {String} message "Invalid or missing information: the year published or ISBN value provided is either missing, not a number, or not of the required length - please refer to documentation"
+ * @apiError (400: Book exists) {String} message "Book already exists"
+ * @apiError (500: Server Error) {String} message "server error - contact support"
  * @apiUse JSONError
  */
 createRouter.post(
@@ -92,7 +86,7 @@ createRouter.post(
             console.error('Invalid or missing rating value');
             response.status(400).send({
                 message:
-                    'a rating input is either not provided or not a number - check documentation',
+                    'Invalid or missing information: rating input is either not provided or not a number - please refer to documentation',
             });
         }
     },
@@ -111,13 +105,13 @@ createRouter.post(
             console.error('Invalid or missing year or isbn');
             response.status(400).send({
                 message:
-                    'the published year or ISBN value provided is either missing, not a number, or not of the required length - check documentation',
+                    'Invalid or missing information: the year published or ISBN value provided is either missing, not a number, or not of the required length - please refer to documentation',
             });
         }
     },
     (request: Request, response: Response, next: NextFunction) => {
          const theQuery =
-            'INSERT INTO books (bookid, isbn13, publication_year, original_title, title, image_url, image_small_url) VALUES (DEFAULT, $1, $2, $3, $4, $5, $6)';
+            'INSERT INTO books (isbn13, publication_year, original_title, title, image_url, image_small_url) VALUES ($1, $2, $3, $4, $5, $6)';
         const values = [
             request.body.ISBN,
             request.body.yearPublished,
@@ -140,15 +134,13 @@ createRouter.post(
                         message: 'Book already exists',
                     });
                 } else {
-                    //log the error
                     console.error('DB Query error on POST');
                     console.error(error);
                     response.status(500).send({
-                        message: 'server error on book - contact support',
+                        message: 'server error - contact support'
                     });
                 }
             });
-            
     },
     (request: Request, response: Response, next: NextFunction) => {
         const theQuery =
@@ -165,24 +157,12 @@ createRouter.post(
                 next();
             })
             .catch((error) => {
-                if (
-                    error.detail != undefined &&
-                    (error.detail as string).endsWith('already exists.')
-                ) {
-                    console.error('ratings entry exists');
-                    response.status(400).send({
-                        message: 'ratings under this ID already exist',
-                    });
-                } else {
-                    //log the error
-                    console.error('DB Query error on POST');
-                    console.error(error);
-                    response.status(500).send({
-                        message: 'server error on ratings - contact support',
-                    });
-                }
+                console.error('DB Query error on POST');
+                console.error(error);
+                response.status(500).send({
+                message: 'server error - contact support'
+                });
             });
-            
     },
     (request: Request, response: Response) => {
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
@@ -194,29 +174,16 @@ createRouter.post(
         ];
         pool.query(theQuery, values)
              .then((result) => {
-                response.status(201).send("table created");
+                response.status(201).send("book created");
             })
             .catch((error) => {
-                if (
-                    error.detail != undefined &&
-                    (error.detail as string).endsWith('already exists.')
-                ) {
-                    console.error('author exists');
-                    response.status(400).send({
-                        message: 'an author under this id already exists',
-                    });
-                } else {
-                    //log the error
-                    console.error('DB Query error on POST');
-                    console.error(error);
-                    response.status(500).send({
-                        message: 'server error on authors - contact support',
-                    });
-                }
-            });
-            
-    }
-    
+                console.error('DB Query error on POST');
+                console.error(error);
+                response.status(500).send({
+                message: 'server error - contact support'
+                });
+            });       
+    }  
 );
 
 export { createRouter };
