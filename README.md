@@ -5,7 +5,7 @@
 # Group 4 Beta Sprint Documentation
 
 *Heroku - https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/
-*API documentation - https://billjamesm.github.io/tcss460-group4-apiDoc/
+*API documentation - https://lionesscub807.github.io/TCSS-460-WebAPI/
 
 ## Beta Sprint Contribution
 ## Beta Sprint Contribution
