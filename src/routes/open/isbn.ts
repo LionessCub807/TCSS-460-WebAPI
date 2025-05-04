@@ -39,6 +39,7 @@ function mwValidISBN(request: Request, response: Response, next: NextFunction) {
  * @apiSuccess {string} entry.image_small_url The small image URL associated with <code>ISBN</code>
  *
  * @apiError (404: ISBN Not Found) {string} message "ISBN not found"
+ * @apiError (404: Missing Valid ISBN) {string} message "Missing valid ISBN - please refer to documentation"
  */
 
 isbnRouter.get(

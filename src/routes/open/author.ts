@@ -48,6 +48,7 @@ function mwValidAuthorName(
  * @apiError (500: Server Error) {String} message "server error - contact support"
  */
 authorRoutes.get('/all', (request: Request, response: Response) => {
+    console.log('test');
     const theQuery = 'SELECT * FROM Authors';
 
     pool.query(theQuery)
@@ -58,6 +59,7 @@ authorRoutes.get('/all', (request: Request, response: Response) => {
         })
         .catch((error) => {
             console.error('DB Query error on GET /author/authors');
+            console.log('THis is the error here ->' + error);
             console.error(error);
             response.status(500).send({
                 message: 'server error - contact support',
@@ -80,6 +82,30 @@ authorRoutes.get('/', (request: Request, response: Response) => {
     response.status(400).send({
         message: 'Missing valid author name - please refer to documentation',
     });
+});
+
+authorRoutes.get('/test', (request: Request, response: Response) => {
+    console.error('stuff');
+    const query = `
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+        ORDER BY table_name;
+    `;
+    pool.query(query)
+        .then((result) => {
+            response.send({
+                authors: result.rows,
+            });
+        })
+        .catch((error) => {
+            console.error('DB Query error on GET /author/authors');
+            console.log('THis is the error here ->' + error);
+            console.error(error);
+            response.status(500).send({
+                message: 'server error - contact support',
+            });
+        });
 });
 
 /**

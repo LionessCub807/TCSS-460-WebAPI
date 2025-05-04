@@ -16,15 +16,16 @@ function mwValidBookBody(
         isStringProvided(request.body.title) &&
         isStringProvided(request.body.originalTitle) &&
         isStringProvided(request.body.imageurl) &&
-        isStringProvided(request.body.iconurl)
-
+        isStringProvided(request.body.iconurl) &&
+        validationFunctions.isNumberProvided(request.body.ISBN) &&
+        validationFunctions.isNumberProvided(request.body.yearPublished)
     ) {
         next();
     } else {
-        console.error('Missing required information relating to the author, title, or originalTitle field');
+        console.error('Missing required information');
         response.status(400).send({
             message:
-                'Missing required information: information relating to the author, title, or originalTitle field is missing',
+                'Missing required information: information in the request body is missing - please refer to documentation',
         });
     }
 }
@@ -57,7 +58,7 @@ function mwValidBookBody(
  * 
  * @apiSuccess (Success 201) {String} message: book created
  *
- * @apiError (400: Missing required information) {String} message "Missing required information: information relating to the author, title, or originalTitle field is missing - please refer to documentation"
+ * @apiError (400: Missing required information) {String} message "Missing required information: information in the request body is missing - please refer to documentation"
  * @apiError (400: Invalid or missing information) {String} message "Invalid or missing information: rating input is either not provided or not a number - please refer to documentation"
  * @apiError (400: Invalid or missing information) {String} message "Invalid or missing information: the year published or ISBN value provided is either missing, not a number, or not of the required length - please refer to documentation"
  * @apiError (400: Book exists) {String} message "Book already exists"
@@ -76,10 +77,15 @@ createRouter.post(
 
         if (
             validationFunctions.isNumberProvided(one) &&
+            parseInt(one) > 0 &&
             validationFunctions.isNumberProvided(two) &&
+            parseInt(two) > 0 &&
             validationFunctions.isNumberProvided(three) &&
+            parseInt(three) > 0 &&
             validationFunctions.isNumberProvided(four) &&
-            validationFunctions.isNumberProvided(five) 
+            parseInt(four) > 0 &&
+            validationFunctions.isNumberProvided(five) &&
+            parseInt(five) > 0 
         ) {
             next();
         } else {
