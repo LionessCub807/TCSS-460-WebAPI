@@ -28,7 +28,11 @@ function mwValidRatingBody(
     }
 }
 /**
+ * @apiDefine UpdateBookRatings Update All Star Ratings for a Book
+ * This endpoint allows updating all star ratings for a specific book.
+ *
  * @api {put} /books/:bookid/rating Update All Star Ratings for a Book
+ * @apiDescription Updates all star ratings (`rating_1_star`, `rating_2_star`, etc.) for a specific book.
  * @apiName UpdateBookRatings
  * @apiGroup Ratings
  *
@@ -69,13 +73,14 @@ updateRatingRouter.put(
         console.log('bookid:', request.params.bookid);
         const bookid = parseInt(request.params.bookid);
         console.log('PUT /books/:bookid/rating route hit');
-        if (validationFunctions.isNumberProvided(bookid)) {
-            next();
-        } else {
+
+        if (isNaN(bookid)) {
             console.error('Invalid book ID');
             response.status(400).send({
                 message: 'Invalid book ID',
             });
+        } else {
+            next();
         }
     },
     (request: Request, response: Response) => {
@@ -124,13 +129,17 @@ updateRatingRouter.put(
     }
 );
 /**
+ * @apiDefine AddStarRating Increment a Specific Star Rating
+ * This endpoint allows incrementing a specific star rating for a specific book.
+ *
  * @api {put} /books/:bookid/add-star Increment a Specific Star Rating
+ * @apiDescription Increments the value of a specific star rating column (e.g., `rating_1_star`, `rating_2_star`, etc.) for a specific book.
  * @apiName AddStarRating
  * @apiGroup Ratings
  *
  * @apiParam {Number} bookid The unique ID of the book.
  *
- * @apiBody {String} rating_column One of: `rating_1_star`, `rating_2_star`, `rating_3_star`, `rating_4_star`, `rating_5_star`
+ * @apiBody {String} rating_column One of: `rating_1_star`, `rating_2_star`, `rating_3_star`, `rating_4_star`, `rating_5_star`.
  *
  * @apiSuccess {String} message Success message indicating the updated star column.
  * @apiSuccess {Object} updatedRatings The updated rating row from the database.
@@ -169,7 +178,7 @@ updateRatingRouter.put(
             'rating_5_star',
         ];
 
-        if (!validationFunctions.isNumberProvided(bookid)) {
+        if (isNaN(bookid)) {
             console.error('Invalid book ID');
             return response.status(400).send({
                 message: 'Invalid book ID',
