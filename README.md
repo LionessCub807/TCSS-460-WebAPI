@@ -2,8 +2,8 @@
 
 # Group 4 Beta II Sprint Documentation
 
-*Heroku - https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/
-*API documentation - https://lionesscub807.github.io/TCSS-460-WebAPI/
+- Heroku - https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/
+- API documentation - https://lionesscub807.github.io/TCSS-460-WebAPI/
 
 ## Beta II Sprint Contribution
 
@@ -18,5 +18,3 @@
 	Met briefly to split up tasks for the week.
 
 ## Beta II Sprint Comments
-
-- wab api
