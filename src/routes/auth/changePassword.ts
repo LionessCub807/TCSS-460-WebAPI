@@ -60,18 +60,15 @@ changePasswordRouter.put(
         next: NextFunction
     ) => {
         // Check both passwords are provided
-        console.log('testing');
-        console.log('Claims:', request.claims); // Now this will work
-
         if (
             isStringProvided(request.body.oldPassword) &&
             isStringProvided(request.body.newPassword)
         ) {
             next();
         } else {
-            console.log("didn't get past the first block");
             response.status(400).send({
-                message: 'Missing required information',
+                message:
+                    'Missing required information - Missing old/new password',
             });
         }
     },
