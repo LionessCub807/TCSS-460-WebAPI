@@ -1,58 +1,22 @@
-# TCSS460 - Beta
-# TCSS460 - Beta
+# TCSS460 - Beta II
 
-# Group 4 Beta Sprint Documentation
-# Group 4 Beta Sprint Documentation
+# Group 4 Beta II Sprint Documentation
 
 *Heroku - https://group4-tcss460-web-api-88aed6dd5161.herokuapp.com/
 *API documentation - https://lionesscub807.github.io/TCSS-460-WebAPI/
 
-## Beta Sprint Contribution
-## Beta Sprint Contribution
+## Beta II Sprint Contribution
 
-- **Selly** - Updated Heroku and local databases, wrote tests for the author routes, cleaned csv file
-- **Bindi** - Implemented get book by isbn route, wrote unit tests
-- **Jacob** - Implemented create book route, cleaned csv file, wrote isbn route tests
-- **Bill** - Refreshed api documentation, wrote books by author route, wrote tests for create book route.
-- **Selly** - Updated Heroku and local databases, wrote tests for the author routes, cleaned csv file
-- **Bindi** - Implemented get book by isbn route, wrote unit tests
-- **Jacob** - Implemented create book route, cleaned csv file, wrote isbn route tests
-- **Bill** - Refreshed api documentation, wrote books by author route, wrote tests for create book route.
+- **Selly** - Wrote route for updating books rating route and documentation, updated GitHub page for documentation
+- **Bindi** - Wrote unit tests for retrieving all books
+- **Jacob** - Wrote route for retrieving all books using pagination and documentation, tested updating rating routes
+- **Bill** - Wrote routes, documentation, and testing for changing passwords
 
-## Beta Sprint Meetings
-## Beta Sprint Meetings
+## Beta II Sprint Meetings
 
-- 4/22 3:30PM - 5:00PM
+5/29 6:00PM - 6:30PM
+	Met briefly to split up tasks for the week.
 
-Where/when/how did you meet
-	MLG307
-What was discussed
-	Creating database schema
+## Beta II Sprint Comments
 
-4/25 1:30PM - 3:00PM
-
-Where/when/how did you meet
-	Online 
-What was discussed
-	Creating database for Docker/Heroku
-	Tasks for the rest of the week
-
-## Beta Sprint Comments
-- wab api
-- 4/22 3:30PM - 5:00PM
-
-Where/when/how did you meet
-	MLG307
-What was discussed
-	Creating database schema
-
-4/25 1:30PM - 3:00PM
-
-Where/when/how did you meet
-	Online 
-What was discussed
-	Creating database for Docker/Heroku
-	Tasks for the rest of the week
-
-## Beta Sprint Comments
 - wab api
