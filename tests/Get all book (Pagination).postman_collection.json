@@ -1,0 +1,44 @@
+{
+	"info": {
+		"_postman_id": "67079922-a289-4d9c-b0d3-758b79813149",
+		"name": "Get all book (Pagination)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43739141",
+		"_collection_link": "https://bindinguyen.postman.co/workspace/Bindi-Nguyen's-Workspace~2b2d2c7c-e286-462d-8c6a-cdc936b32f50/collection/43739141-67079922-a289-4d9c-b0d3-758b79813149?action=share&source=collection_link&creator=43739141"
+	},
+	"item": [
+		{
+			"name": "Getting all book success",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/book/all/cursor?cursor=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"book",
+						"all",
+						"cursor"
+					],
+					"query": [
+						{
+							"key": "cursor",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting all book success default value",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
