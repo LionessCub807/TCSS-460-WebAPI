@@ -43,18 +43,18 @@ function mwValidBookBody(
  * @apiName Create Book
  * @apiGroup Books
  *
- * @apiBody {string} author, the writer of the book
- * @apiBody {string} title, the title of the book
- * @apiBody {string} originalTitle, the original book title
- * @apiBody {number} yearPublished, the year the book was first published, must be positive and no more than 4 digits
+ * @apiBody {string} author the writer of the book
+ * @apiBody {string} title the title of the book
+ * @apiBody {string} originalTitle the original book title
+ * @apiBody {number} yearPublished the year the book was first published, must be positive and no more than 4 digits
  * @apiBody {number} ISBN, the ISBN belonging to the book, must be 13 digits
- * @apiBody {number} oneStarRatings, the amount of 1 star ratings the book has
- * @apiBody {number} twoStarRatings, the amount of 2 star ratings the book has
- * @apiBody {number} threeStarRatings, the amount of 3 star ratings the book has
- * @apiBody {number} fourStarRatings, the amount of 4 star ratings the book has
- * @apiBody {number} fiveStarRatings, the amount of 5 star ratings the book has
- * @apiBody {string} imageurl, url for image of book
- * @apiBody {string} iconurl, url for icon of book
+ * @apiBody {number} oneStarRatings the amount of 1 star ratings the book has
+ * @apiBody {number} twoStarRatings the amount of 2 star ratings the book has
+ * @apiBody {number} threeStarRatings the amount of 3 star ratings the book has
+ * @apiBody {number} fourStarRatings the amount of 4 star ratings the book has
+ * @apiBody {number} fiveStarRatings the amount of 5 star ratings the book has
+ * @apiBody {string} imageurl url for image of book
+ * @apiBody {string} iconurl url for icon of book
  * 
  * @apiSuccess (Success 201) {String} message: book created
  *
