@@ -7,9 +7,9 @@ import { updateRatingRouter } from './updaterating';
 
 import { retrieveAllRouter } from './retrievebooks';
 
-import { titleRouter } from './bookbytitle';
+import { deleteBookByISBNRouter } from './deleteBookByISBN';
 
-import { yearRouter } from './booksbyyear';
+import { deleteSeries } from './deleteSeriesOfBooks';
 
 const bookRoutes: Router = express.Router();
 
@@ -19,9 +19,8 @@ bookRoutes.use('/books', updateRatingRouter);
 
 bookRoutes.use('/books/all', retrieveAllRouter);
 
-bookRoutes.use('/books/title/', titleRouter);
+bookRoutes.use('/books', deleteBookByISBNRouter);
 
-bookRoutes.use('/books/year', yearRouter);
-
+bookRoutes.use('/books/delete', deleteSeries);
 
 export { bookRoutes };

@@ -1,11 +1,11 @@
 -- Active: 1710457548247@@127.0.0.1@5432@tcss460@public
-
+DROP TABLE IF EXISTS Demo;
 CREATE TABLE Demo (DemoID SERIAL PRIMARY KEY,
                         Priority INT,
                         Name TEXT NOT NULL UNIQUE,
                         Message TEXT
 );
-
+DROP TABLE IF EXISTS Account;
 CREATE TABLE Account (Account_ID SERIAL PRIMARY KEY,
                       FirstName VARCHAR(255) NOT NULL,
 		              LastName VARCHAR(255) NOT NULL,
@@ -15,14 +15,14 @@ CREATE TABLE Account (Account_ID SERIAL PRIMARY KEY,
                       Account_Role int NOT NULL
 );
 
-
+DROP TABLE IF EXISTS Account_Credential;
 CREATE TABLE Account_Credential (Credential_ID SERIAL PRIMARY KEY,
                       Account_ID INT NOT NULL,
                       Salted_Hash VARCHAR(255) NOT NULL,
                       salt VARCHAR(255),
                       FOREIGN KEY(Account_ID) REFERENCES Account(Account_ID)
 );
-
+DROP TABLE IF EXISTS tempbook;
 -- Temporary table
 -- Only used to move data from CSV file to SQL tables
 CREATE TEMP TABLE tempbook (book_id INT,
@@ -48,6 +48,7 @@ FROM '/docker-entrypoint-initdb.d/books.csv'
 DELIMITER ','
 CSV HEADER;
 
+DROP TABLE IF EXISTS Books;
 -- Book table
 CREATE TABLE Books (bookid SERIAL PRIMARY KEY,
         isbn13 BIGINT UNIQUE,
@@ -63,6 +64,7 @@ INSERT INTO Books (isbn13, publication_year, original_title, title, image_url, i
 SELECT isbn13, original_publication_year, original_title, title, image_url, small_image_url
 FROM tempbook;
 
+DROP TABLE IF EXISTS Authors;
 -- Author table
 CREATE TABLE Authors(authorid SERIAL PRIMARY KEY,
         authorname TEXT
@@ -86,11 +88,12 @@ FROM tempbook
 WHERE authors 
 NOT LIKE '%,%';
 
+DROP TABLE IF EXISTS BookAuthor;
 -- Book and author transaction table
 CREATE TABLE BookAuthor (authorid INT,
         bookid INT,
         FOREIGN KEY (authorid) REFERENCES Authors(authorid),
-        FOREIGN KEY (bookid) REFERENCES Books(bookid)
+        FOREIGN KEY (bookid) REFERENCES Books(bookid) ON DELETE CASCADE
 );
 
 -- Populating transaction table
@@ -102,6 +105,7 @@ JOIN tempbook t
 ON t.authors 
 LIKE '%' || a.authorname || '%';
 
+DROP TABLE IF EXISTS Ratings;
 -- Ratings Table
 CREATE TABLE Ratings(ratingid SERIAL PRIMARY KEY,
         bookid INT,
@@ -110,7 +114,7 @@ CREATE TABLE Ratings(ratingid SERIAL PRIMARY KEY,
         rating_3_star INT,
         rating_4_star INT,
         rating_5_star INT,
-        FOREIGN KEY (bookid) REFERENCES Books(bookid)
+        FOREIGN KEY (bookid) REFERENCES Books(bookid) ON DELETE CASCADE
 );
 
 -- Populating ratings table
