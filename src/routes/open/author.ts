@@ -1,6 +1,4 @@
-//express is the framework we're going to use to handle requests
 import express, { NextFunction, Request, Response, Router } from 'express';
-//Access the connection to Postgres Database and validation functions
 import { pool, validationFunctions } from '../../core/utilities';
 
 const authorRoutes: Router = express.Router();
@@ -13,11 +11,7 @@ function mwValidAuthorName(
     response: Response,
     next: NextFunction
 ) {
-    console.log('mw');
-    console.log('Request here = ' + request);
-    console.log('Response = ' + response);
     const authorName = request.params.authorname;
-    console.log('Author = ' + authorName);
 
     if (
         validationFunctions.isStringProvided(authorName) &&
