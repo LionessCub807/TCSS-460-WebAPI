@@ -93,10 +93,28 @@ retrieveAllRouter.get('/', async (request: Request, response: Response) => {
     const count = result.rows[0].exact_count;
 
     response.send({
-        entries: rows, 
+        Book:{
+            isbn13: result.rows[0].isbn13,
+            authors: result.rows[0].authorname,
+            publication: result.rows[0].publication_year,
+            original_title: result.rows[0].original_title,
+            title: result.rows[0].title,
+            ratings: {
+               average: result.rows[0].average,
+               count: result.rows[0].count,
+               rating_1: result.rows[0].rating_1_star,
+               rating_2: result.rows[0].rating_2_star,
+               rating_3: result.rows[0].rating_3_star,
+               rating_4: result.rows[0].rating_4_star,
+               rating_5: result.rows[0].rating_5_star
+           },
+            icon: {
+               large: result.rows[0].image_url,
+               small: result.rows[0].image_small_url
+           }
+       },
         pagination: {
-            totalRecords: count,
-            limit
+            totalRecords: count
         },
     });
 });
