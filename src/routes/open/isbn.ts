@@ -29,34 +29,79 @@ function mwValidISBN(request: Request, response: Response, next: NextFunction) {
  *
  * @apiParam {number} isbn the isbn to look up.
  *
- * @apiSuccess {Object} entry the entry object for <code>ISBN</code>
- * @apiSuccess {number} entry.bookid The bookid associated with <code>ISBN</code>
- * @apiSuccess {string} entry.isbn13 <code>ISBN</code>
- * @apiSuccess {number} entry.publication_year The year the book with <code>ISBN</code> was published
- * @apiSuccess {string} entry.orignal_title The original title associated with <code>ISBN</code>
- * @apiSuccess {string} entry.title The title associated with <code>ISBN</code>
- * @apiSuccess {string} entry.image_url The image URL associated with <code>ISBN</code>
- * @apiSuccess {string} entry.image_small_url The small image URL associated with <code>ISBN</code>
+ * @apiSuccess {Object} Book the book object for <code>ISBN</code>
+ * @apiSuccess {number} Book.isbn13 <code>ISBN</code>
+ * @apiSuccess {string} Book.authors The author associated with <code>ISBN</code>
+ * @apiSuccess {number} Book.publication The year the book with <code>ISBN</code> was published
+ * @apiSuccess {string} Book.orignal_title The original title associated with <code>ISBN</code>
+ * @apiSuccess {string} Book.title The title associated with <code>ISBN</code>
+ * @apiSuccess {Object} Book.ratings The ratings associated with <code>ISBN</code>
+ * @apiSuccess {number} Book.ratings.average The rating score associated with <code>ISBN</code>
+ * @apiSuccess {number} Book.ratings.count The total number of ratings given
+ * @apiSuccess {number} Book.ratings.rating_1 The total number of 1 star ratings
+ * @apiSuccess {number} Book.ratings.rating_2 The total number of 2 star ratings
+ * @apiSuccess {number} Book.ratings.rating_3 The total number of 3 star ratings
+ * @apiSuccess {number} Book.ratings.rating_4 The total number of 4 star ratings
+ * @apiSuccess {number} Book.ratings.rating_5 The total number of 5 star ratings
+ * @apiSuccess {string} Book.icon The icons associated with <code>ISBN</code>
+ * @apiSuccess {string} Book.icon.large The large icon associated with <code>ISBN</code>
+ * @apiSuccess {string} Book.icon.small The small icon associated with <code>ISBN</code>
  *
- * @apiError (404: ISBN Not Found) {string} message "ISBN not found"
- * @apiError (404: Missing Valid ISBN) {string} message "Missing valid ISBN - please refer to documentation"
+ * @apiError (400: ISBN Not Found) {string} message "ISBN not found"
+ * @apiError (400: Missing Valid ISBN) {string} message "Missing valid ISBN - please refer to documentation"
  */
 
 isbnRouter.get(
     '/:isbn13',
     mwValidISBN,
     (request: Request, response: Response) => {
-        const theQuery = 'SELECT * FROM Books WHERE isbn13 = $1';
+        const theQuery = `SELECT rated_books.*, authors_by_book.authors 
+            FROM (SELECT b.bookid, b.title, b.isbn13, b.publication_year, b.original_title, b.image_url, b.image_small_url,
+            ROUND((r.rating_1_star * 1.0 + r.rating_2_star * 2.0 + r.rating_3_star * 3.0 + r.rating_4_star * 4.0 + r.rating_5_star * 5.0) / 
+            (r.rating_1_star + r.rating_2_star + r.rating_3_star + r.rating_4_star + r.rating_5_star), 2) AS rating,
+            r.rating_1_star + r.rating_2_star + r.rating_3_star + r.rating_4_star + r.rating_5_star AS count,
+            r.rating_1_star, r.rating_2_star, r.rating_3_star, r.rating_4_star, r.rating_5_star
+            FROM Books AS b 
+            INNER JOIN Ratings AS r ON r.bookid = b.bookid
+            ) AS rated_books
+            JOIN 
+            (SELECT b.bookid, STRING_AGG(DISTINCT a.authorname, ', ' ORDER BY a.authorname) AS authors
+            FROM Books b
+            JOIN BookAuthor ba ON b.bookid = ba.bookid
+            JOIN Authors a ON ba.authorid = a.authorid
+            GROUP BY b.bookid
+            ) AS authors_by_book
+            ON rated_books.bookid = authors_by_book.bookid
+            WHERE rated_books.isbn13 = $1`;
         const values = [request.params.isbn13];
 
         pool.query(theQuery, values)
             .then((result) => {
                 if (result.rowCount == 1) {
                     response.send({
-                        entry: result.rows[0],
+                        Book: {
+                            isbn13: result.rows[0].isbn13,
+                            authors: result.rows[0].authors,
+                            publication: result.rows[0].publication_year,
+                            original_title: result.rows[0].original_title,
+                            title: result.rows[0].title,
+                            ratings: {
+                                average: result.rows[0].rating,
+                                count: result.rows[0].count,
+                                rating_1: result.rows[0].rating_1_star,
+                                rating_2: result.rows[0].rating_2_star,
+                                rating_3: result.rows[0].rating_3_star,
+                                rating_4: result.rows[0].rating_4_star,
+                                rating_5: result.rows[0].rating_5_star,
+                            },
+                            icon: {
+                                large: result.rows[0].image_url,
+                                small: result.rows[0].image_small_url,
+                            },
+                        },
                     });
                 } else {
-                    response.status(404).send({
+                    response.status(400).send({
                         message: 'ISBN not found',
                     });
                 }
