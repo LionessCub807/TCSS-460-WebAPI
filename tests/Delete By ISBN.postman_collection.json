@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "bd62de0d-cc5a-4153-acad-198e24300005",
+		"name": "Delete By ISBN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44260564",
+		"_collection_link": "https://billmarban.postman.co/workspace/bill-marban's-Workspace~57f780dd-f71a-4130-886b-acacda14dc2d/collection/44260564-bd62de0d-cc5a-4153-acad-198e24300005?action=share&source=collection_link&creator=44260564"
+	},
+	"item": [
+		{
+			"name": "Valid ISBN Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 9780439023480 this is the isbn for hunger games",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Book deleted message\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.message).to.eql(\"Book deleted successfully\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/books/isbn/9780439023480",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						"9780439023480"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ISBN does't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"ISBN not found message\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.message).to.eql(\"ISBN not found\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/isbn/0000000000000",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						"0000000000000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid ISBN (not enough digits)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Invalid ISBN format message\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.message).to.eql(\"Invalid ISBN format\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/isbn/123",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid ISBN (non digit)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Invalid ISBN format message\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.message).to.eql(\"Invalid ISBN format\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/isbn/invalid",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						"invalid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid ISBN (no parameter)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Missing route response\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /books/isbn/\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/isbn/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid ISBN (only spaces)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Invalid ISBN format message\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.message).to.eql(\"Invalid ISBN format\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/isbn/%20",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"isbn",
+						"%20"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
