@@ -4,7 +4,7 @@
 		"name": "ISBN get testing",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "43739141",
-		"_collection_link": "https://bindinguyen.postman.co/workspace/1829d831-336d-4460-9928-0caa3a8878dd/collection/43739141-c87f1cb8-809b-41ac-8d37-f872da276666?action=share&source=collection_link&creator=43739141"
+		"_collection_link": "https://bindinguyen.postman.co/workspace/Messages~1829d831-336d-4460-9928-0caa3a8878dd/collection/43739141-c87f1cb8-809b-41ac-8d37-f872da276666?action=share&source=collection_link&creator=43739141"
 	},
 	"item": [
 		{
@@ -28,12 +28,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4000/isbn/11122413",
-					"protocol": "http",
+					"raw": "{{base_url}}/isbn/11122413",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "4000",
 					"path": [
 						"isbn",
 						"11122413"
@@ -62,12 +60,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4000/isbn/9780001243001",
-					"protocol": "http",
+					"raw": "{{base_url}}/isbn/9780001243001",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "4000",
 					"path": [
 						"isbn",
 						"9780001243001"
@@ -96,7 +92,7 @@
 							"    pm.expect(response.Book).to.have.property(\"isbn13\");",
 							"    pm.expect(response.Book).to.have.property(\"authors\");",
 							"    pm.expect(response.Book).to.have.property(\"publication\");",
-							"    pm.expect(response.Book).to.have.property(\"orignal_title\");",
+							"    pm.expect(response.Book).to.have.property(\"original_title\");",
 							"    pm.expect(response.Book).to.have.property(\"title\");",
 							"    pm.expect(response.Book).to.have.property(\"ratings\");",
 							"",
@@ -109,8 +105,8 @@
 							"    pm.expect(response.Book.ratings).to.have.property(\"rating_5\");",
 							"",
 							"    pm.expect(response.Book).to.have.property(\"icon\");",
-							"    pm.expect(reponse.Book.icon).to.have.property(\"large\");",
-							"    pm.expect(reponse.Book.icon).to.have.property(\"small\");",
+							"    pm.expect(response.Book.icon).to.have.property(\"large\");",
+							"    pm.expect(response.Book.icon).to.have.property(\"small\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -122,11 +118,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}isbn/9781401308580",
+					"raw": "{{base_url}}/isbn/9781401308580",
 					"host": [
-						"{{base_url}}isbn"
+						"{{base_url}}"
 					],
 					"path": [
+						"isbn",
 						"9781401308580"
 					]
 				}
