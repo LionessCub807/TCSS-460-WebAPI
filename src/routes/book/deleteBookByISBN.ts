@@ -20,12 +20,18 @@ const deleteBookByISBNRouter = express.Router();
  * @apiError (500: Server Error) {string} message "Server error - contact support"
  */
 deleteBookByISBNRouter.delete(
-    '/isbn/:isbn13',
+    '/isbn/:isbn13?',
     (request: Request, response: Response) => {
         const isbn13 = request.params.isbn13;
 
+        if (!isbn13) {
+            return response.status(400).send({
+                message: 'ISBN not found',
+            });
+        }
+
         // Validate ISBN format
-        if (!isbn13 || isbn13.length !== 13 || isNaN(Number(isbn13))) {
+        if (isbn13.length !== 13 || isNaN(Number(isbn13))) {
             return response.status(400).send({
                 message: 'Invalid ISBN format',
             });
