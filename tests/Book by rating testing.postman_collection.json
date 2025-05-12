@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "dc1514f0-eb10-423e-95d4-8a45c082895d",
+		"name": "Book by rating testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44334120"
+	},
+	"item": [
+		{
+			"name": "Number out of range high 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.responce;",
+							"pm.test(\"400 Invalid rating\", () =>",
+							"    pm.response.to.have.status(400)",
+							");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/books/retrieveRating/5.1",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"books",
+						"retrieveRating",
+						"5.1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Number out of range low 400 Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.responce;",
+							"pm.test(\"400 Invalid rating\", () =>",
+							"    pm.response.to.have.status(400)",
+							");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/books/retrieveRating/-1",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"books",
+						"retrieveRating",
+						"-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Not a number 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.responce;",
+							"pm.test(\"400 Invalid rating\", () =>",
+							"    pm.response.to.have.status(400)",
+							");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/books/retrieveRating/aihfpad",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"books",
+						"retrieveRating",
+						"aihfpad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Not found 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.responce;",
+							"pm.test(\"404 Invalid rating\", () =>",
+							"    pm.response.to.have.status(404)",
+							");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/books/retrieveRating/5",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"books",
+						"retrieveRating",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.responce;",
+							"pm.test(\"200 OK\", () =>",
+							"    pm.response.to.have.status(200)",
+							");",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/books/retrieveRating/4.2",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"books",
+						"retrieveRating",
+						"4.2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
