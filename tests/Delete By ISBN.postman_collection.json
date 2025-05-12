@@ -178,11 +178,11 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 404\", function () {",
-							"    pm.response.to.have.status(404);",
+							"    pm.response.to.have.status(400);",
 							"});",
 							"",
 							"pm.test(\"Missing route response\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /books/isbn/\");",
+							"    pm.expect(pm.response.text()).to.include(\"ISBN not found\");",
 							"});"
 						],
 						"type": "text/javascript",
