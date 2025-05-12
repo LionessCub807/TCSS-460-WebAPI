@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "ebb675ea-19ec-49d2-8eb0-6819a21c41c1",
+		"name": "Delete range/series of books",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43739141",
+		"_collection_link": "https://bindinguyen.postman.co/workspace/Bindi-Nguyen's-Workspace~2b2d2c7c-e286-462d-8c6a-cdc936b32f50/collection/43739141-ebb675ea-19ec-49d2-8eb0-6819a21c41c1?action=share&source=collection_link&creator=43739141"
+	},
+	"item": [
+		{
+			"name": "No params",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status should be 400\", pm.response.to.have.status(400));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/delete",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No book found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status should be 404\", pm.response.to.have.status(404));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/delete/ReallyLongTitleNameOfABook123",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"delete",
+						"ReallyLongTitleNameOfABook123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response status should be 200\", pm.response.to.have.status(200));\r",
+							"\r",
+							"pm.test(\"Response should have message\", () => pm.expect(response).to.haveOwnProperty(\"message\"));\r",
+							"pm.test(\"Response should have deleted book list\", () => pm.expect(response).to.haveOwnProperty(\"deleted\"));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/delete/Hunger",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"delete",
+						"Hunger"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
