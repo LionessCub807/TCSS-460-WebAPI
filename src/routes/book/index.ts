@@ -11,6 +11,8 @@ import { deleteBookByISBNRouter } from './deleteBookByISBN';
 
 import { deleteSeries } from './deleteSeriesOfBooks';
 
+import { retrieveRating } from './retrieveByRating';
+
 import { titleRouter } from './bookbytitle';
 
 import { yearRouter } from './booksbyyear';
@@ -18,6 +20,8 @@ import { yearRouter } from './booksbyyear';
 const bookRoutes: Router = express.Router();
 
 bookRoutes.use('/books/new', createRouter);
+
+bookRoutes.use('/books/retrieveRating', retrieveRating);
 
 bookRoutes.use('/books', updateRatingRouter);
 
