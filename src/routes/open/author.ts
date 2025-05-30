@@ -124,22 +124,20 @@ authorRoutes.get(
     mwValidAuthorName,
     (request: Request, response: Response) => {
         const authorName = request.params.authorname as string;
-        console.log('function');
-        console.log(authorName);
         const theQuery = `
-            SELECT b.isbn13, b.title, b.original_title, b.publication_year, b.image_url, b.image_small_url, a.authorname,
-            ROUND((r.rating_1_star * 1.0 + r.rating_2_star * 2.0 + 
-            r.rating_3_star * 3.0 + r.rating_4_star * 4.0 + 
-            r.rating_5_star * 5.0) / (r.rating_1_star + 
-            r.rating_2_star + r.rating_3_star + r.rating_4_star + 
-            r.rating_5_star), 2) AS average,
-            r.rating_1_star + r.rating_2_star + r.rating_3_star + 
-            r.rating_4_star + r.rating_5_star AS count,
-            r.rating_1_star,
-            r.rating_2_star, 
-            r.rating_3_star, 
-            r.rating_4_star,
-            r.rating_5_star
+            SELECT b.isbn13, b.title, b.original_title, b.publication_year, 
+                   b.image_url, b.image_small_url, a.authorname,
+                   ROUND((
+                       r.rating_1_star * 1.0 + r.rating_2_star * 2.0 + 
+                       r.rating_3_star * 3.0 + r.rating_4_star * 4.0 + 
+                       r.rating_5_star * 5.0
+                   ) / NULLIF(
+                       r.rating_1_star + r.rating_2_star + r.rating_3_star + 
+                       r.rating_4_star + r.rating_5_star, 0), 2) AS average,
+                   r.rating_1_star + r.rating_2_star + r.rating_3_star + 
+                   r.rating_4_star + r.rating_5_star AS count,
+                   r.rating_1_star, r.rating_2_star, r.rating_3_star, 
+                   r.rating_4_star, r.rating_5_star
             FROM Books b
             JOIN BookAuthor ba ON b.bookid = ba.bookid
             JOIN Ratings r ON b.bookid = r.bookid
@@ -152,28 +150,25 @@ authorRoutes.get(
             .then((result) => {
                 if (result.rowCount > 0) {
                     response.send({
-                        author: result.rows[0].authorname,
-                        entries: result.rows.map((entry) => ({
-                            Book:{
-                                isbn13: entry.isbn13,
-                                authors: entry.authorname,
-                                publication: entry.publication_year,
-                                original_title: entry.original_title,
-                                title: entry.title,
-                                ratings: {
-                                    average: entry.average,
-                                    count: entry.count,
-                                    rating_1: entry.rating_1_star,
-                                    rating_2: entry.rating_2_star,
-                                    rating_3: entry.rating_3_star,
-                                    rating_4: entry.rating_4_star,
-                                    rating_5: entry.rating_5_star
-                                },
-                                icon: {
-                                    large: entry.image_url,
-                                    small: entry.image_small_url
-                                }
-                            }
+                        Books: result.rows.map((entry) => ({
+                            isbn13: entry.isbn13,
+                            authorname: entry.authorname,
+                            publication_year: entry.publication_year,
+                            original_title: entry.original_title,
+                            title: entry.title,
+                            ratings: {
+                                average: parseFloat(entry.average) || 0,
+                                count: entry.count,
+                                rating_1: entry.rating_1_star,
+                                rating_2: entry.rating_2_star,
+                                rating_3: entry.rating_3_star,
+                                rating_4: entry.rating_4_star,
+                                rating_5: entry.rating_5_star,
+                            },
+                            icon: {
+                                large: entry.image_url,
+                                small: entry.image_small_url,
+                            },
                         })),
                     });
                 } else {

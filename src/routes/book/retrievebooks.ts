@@ -46,77 +46,89 @@ const isNumberProvided = validationFunctions.isNumberProvided;
  *
  */
 retrieveAllRouter.get('/', async (request: Request, response: Response) => {
-
-    // NOTE: +request.query.limit the + tells TS to treat this string as a number
     const limit: number =
         isNumberProvided(request.query.limit) && +request.query.limit > 0
             ? +request.query.limit
             : 10;
+
     const cursor: number =
         isNumberProvided(request.query.cursor) && +request.query.cursor >= 0
             ? +request.query.cursor
             : 0;
 
-    const theQuery = `SELECT Books.isbn13, 
-                             Books.publication_year, 
-                             Books.original_title, 
-                             Books.title,
-                             ROUND((Ratings.rating_1_star * 1.0 + Ratings.rating_2_star * 2.0 + 
-                             Ratings.rating_3_star * 3.0 + Ratings.rating_4_star * 4.0 + 
-                             Ratings.rating_5_star * 5.0) / (Ratings.rating_1_star + 
-                             Ratings.rating_2_star + Ratings.rating_3_star + Ratings.rating_4_star + 
-                             Ratings.rating_5_star), 2) AS average,
-                             Ratings.rating_1_star + Ratings.rating_2_star + Ratings.rating_3_star + 
-                             Ratings.rating_4_star + Ratings.rating_5_star AS count,
-                             Ratings.rating_1_star,
-                             Ratings.rating_2_star, 
-                             Ratings.rating_3_star, 
-                             Ratings.rating_4_star,
-                             Ratings.rating_5_star,
-                             Books.image_url,
-                             Books.image_small_url
-                             FROM Books JOIN Ratings ON Books.bookid = Ratings.bookid
-                             AND Books.bookid > $2
-                             ORDER BY Books.bookid
-                             LIMIT $1`;
-    
+    const theQuery = `
+        SELECT Books.isbn13, 
+               Authors.authorname, 
+               Books.publication_year, 
+               Books.original_title, 
+               Books.title,
+               ROUND((
+                   Ratings.rating_1_star * 1.0 + Ratings.rating_2_star * 2.0 + 
+                   Ratings.rating_3_star * 3.0 + Ratings.rating_4_star * 4.0 + 
+                   Ratings.rating_5_star * 5.0
+               ) / NULLIF(
+                   Ratings.rating_1_star + Ratings.rating_2_star + Ratings.rating_3_star + 
+                   Ratings.rating_4_star + Ratings.rating_5_star, 0), 2) AS average,
+               Ratings.rating_1_star + Ratings.rating_2_star + Ratings.rating_3_star + 
+               Ratings.rating_4_star + Ratings.rating_5_star AS count,
+               Ratings.rating_1_star,
+               Ratings.rating_2_star, 
+               Ratings.rating_3_star, 
+               Ratings.rating_4_star,
+               Ratings.rating_5_star,
+               Books.image_url,
+               Books.image_small_url
+        FROM Books
+        JOIN Ratings ON Books.bookid = Ratings.bookid
+        JOIN BookAuthor ON Books.bookid = BookAuthor.bookid AND Books.bookid > $2
+        JOIN Authors ON BookAuthor.authorid = Authors.authorid
+        ORDER BY Books.bookid
+        LIMIT $1
+    `;
+
     const values = [limit, cursor];
 
-    const { rows } = await pool.query(theQuery, values);
-    
-    const result = await pool.query(
-        'SELECT count(bookid) from Books;'
-    );
-   
-    const count = result.rows[0].count;
+    try {
+        const { rows } = await pool.query(theQuery, values);
 
-    response.send({
-        entries: rows.map((entry) => ({
-            Book:{
-            isbn13: entry.isbn13,
-            authors: entry.authorname,
-            publication: entry.publication_year,
-            original_title: entry.original_title,
-            title: entry.title,
+        const countResult = await pool.query(
+            'SELECT COUNT(bookid) FROM Books;'
+        );
+        const count = parseInt(countResult.rows[0].count);
+
+        const books = rows.map((row) => ({
+            isbn13: row.isbn13,
+            authorname: row.authorname,
+            publication_year: row.publication_year,
+            original_title: row.original_title,
+            title: row.title,
             ratings: {
-               average: entry.average,
-               count: entry.count,
-               rating_1: entry.rating_1_star,
-               rating_2: entry.rating_2_star,
-               rating_3: entry.rating_3_star,
-               rating_4: entry.rating_4_star,
-               rating_5: entry.rating_5_star
-           },
+                average: parseFloat(row.average) || 0,
+                count: row.count,
+                rating_1: row.rating_1_star,
+                rating_2: row.rating_2_star,
+                rating_3: row.rating_3_star,
+                rating_4: row.rating_4_star,
+                rating_5: row.rating_5_star,
+            },
             icon: {
-               large: entry.image_url,
-               small: entry.image_small_url
-           }
-       }
-        })),
-        pagination: {
-            totalRecords: count
-        },
-    });
+                large: row.image_url || null,
+                small: row.image_small_url || null,
+            },
+        }));
+
+        response.status(200).send({
+            Books: books,
+            pagination: {
+                totalRecords: count,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        response.status(500).send({
+            message: 'Server error - contact support',
+        });
+    }
 });
 
 export { retrieveAllRouter };
