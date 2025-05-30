@@ -114,10 +114,6 @@ authorRoutes.get('/test', (request: Request, response: Response) => {
  *
  * @apiSuccess {String} author The name of the author.
  * @apiSuccess {Object[]} entries List of books written by the author.
- * @apiSuccess {number} books.bookid The book ID.
- * @apiSuccess {string} books.title The title of the book.
- * @apiSuccess {string} books.original_title The original title (if different).
- * @apiSuccess {number} books.publication_year The year the book was published.
  *
  * @apiError (400: Invalid or Missing Author Name) {String} message "Missing or invalid author name - please refer to documentation"
  * @apiError (404: Not Found) {String} message "No books found for given author"
