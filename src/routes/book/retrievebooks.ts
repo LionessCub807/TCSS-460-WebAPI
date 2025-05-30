@@ -58,7 +58,6 @@ retrieveAllRouter.get('/', async (request: Request, response: Response) => {
             : 0;
 
     const theQuery = `SELECT Books.isbn13, 
-                             Authors.authorname, 
                              Books.publication_year, 
                              Books.original_title, 
                              Books.title,
@@ -77,8 +76,7 @@ retrieveAllRouter.get('/', async (request: Request, response: Response) => {
                              Books.image_url,
                              Books.image_small_url
                              FROM Books JOIN Ratings ON Books.bookid = Ratings.bookid
-                             JOIN BookAuthor ON Books.bookid = BookAuthor.bookid AND Books.bookid > $2
-                             JOIN Authors ON BookAuthor.authorid = Authors.authorid
+                             AND Books.bookid > $2
                              ORDER BY Books.bookid
                              LIMIT $1`;
     
@@ -90,29 +88,31 @@ retrieveAllRouter.get('/', async (request: Request, response: Response) => {
         'SELECT count(bookid) from Books;'
     );
    
-    const count = result.rows[0].exact_count;
+    const count = result.rows[0].count;
 
     response.send({
-        Book:{
-            isbn13: result.rows[0].isbn13,
-            authors: result.rows[0].authorname,
-            publication: result.rows[0].publication_year,
-            original_title: result.rows[0].original_title,
-            title: result.rows[0].title,
+        entries: rows.map((entry) => ({
+            Book:{
+            isbn13: entry.isbn13,
+            authors: entry.authorname,
+            publication: entry.publication_year,
+            original_title: entry.original_title,
+            title: entry.title,
             ratings: {
-               average: result.rows[0].average,
-               count: result.rows[0].count,
-               rating_1: result.rows[0].rating_1_star,
-               rating_2: result.rows[0].rating_2_star,
-               rating_3: result.rows[0].rating_3_star,
-               rating_4: result.rows[0].rating_4_star,
-               rating_5: result.rows[0].rating_5_star
+               average: entry.average,
+               count: entry.count,
+               rating_1: entry.rating_1_star,
+               rating_2: entry.rating_2_star,
+               rating_3: entry.rating_3_star,
+               rating_4: entry.rating_4_star,
+               rating_5: entry.rating_5_star
            },
             icon: {
-               large: result.rows[0].image_url,
-               small: result.rows[0].image_small_url
+               large: entry.image_url,
+               small: entry.image_small_url
            }
-       },
+       }
+        })),
         pagination: {
             totalRecords: count
         },
